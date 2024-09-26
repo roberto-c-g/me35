@@ -98,10 +98,8 @@ def peripheral(numb_zom):
 async def main():
     print("Starting main function")
     await central()
-    # Uncomment to run peripheral
-    # peripheral()
 
 # Start the async event loop
-#asyncio.run(main())
-#print(zombnum)
-peripheral(10)
+asyncio.run(main())
+print(zombnum)
+peripheral(zom_num)
