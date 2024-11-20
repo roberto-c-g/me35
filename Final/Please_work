@@ -1,0 +1,57 @@
+#Pico
+import time
+import bluetooth
+import struct
+import machine
+from machine import Pin
+import neopixel
+from BLE_CEEO import Yell, Listen
+import time
+
+# Stepper Motor Setup
+up_down_motor = machine.PWM(machine.Pin(0), freq=1000)
+left_right_motor = machine.PWM(machine.Pin(1), freq=1000)
+
+# Neopixel Configs
+on = (10,0,10)
+off = (0,0,0)
+
+
+
+try:   
+    L = Listen("GOD_HELP_US", verbose = True)
+    if L.connect_up():
+        print('L connected')
+        while L.is_connected:
+            time.sleep(0.1)
+            if L.is_any:
+                instructions = L.read()
+                directions = instructions.split(",")  
+                for direction in directions:
+                    direction = direction.strip()  # Remove extra spaces
+                    if direction == "Up":
+                        print("Moving Up")
+                        up_down_motor.duty_u16(50000)  
+                        time.sleep(1)
+                        up_down_motor.duty_u16(0)
+                    elif direction == "Down":
+                        print("Moving Down")
+                        up_down_motor.duty_u16(30000)  
+                        time.sleep(1)
+                        up_down_motor.duty_u16(0)
+                    elif direction == "Right":
+                        print("Moving Right")
+                        left_right_motor.duty_u16(50000)  
+                        time.sleep(1)
+                        left_right_motor.duty_u16(0)
+                    elif direction == "Left":
+                        print("Moving Left")
+                        left_right_motor.duty_u16(30000)  
+                        time.sleep(1)
+                        left_right_motor.duty_u16(0)
+                L.send("complete")  #seems to stop around 20 characters
+except Exception as e:
+    print("Error", e)
+finally:
+    L.disconnect()
+    print('closing up')
