@@ -19,7 +19,7 @@ off = (0,0,0)
 
 
 try:   
-    L = Listen("GOD_HELP_US", verbose = True)
+    L = Listen("my_Name", verbose = True)
     if L.connect_up():
         print('L connected')
         while L.is_connected:
