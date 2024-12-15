@@ -2,12 +2,10 @@ from machine import Pin, PWM, deepsleep
 import time
 import BLE_CEEO as BLE_CEEO
 import machine
-import neopixel
 
 # Setup
 buzzer = PWM(Pin(18, Pin.OUT))
 led_2 = Pin(16, Pin.OUT)
-led_1 = Pin(17, Pin.OUT)
 button = Pin(14, Pin.IN, Pin.PULL_DOWN)
 f0 = machine.Pin('GPIO0', machine.Pin.OUT)
 f0.off()
@@ -19,10 +17,6 @@ f3 = machine.Pin('GPIO3', machine.Pin.OUT)
 f3.off()
 f4 = machine.Pin('GPIO4', machine.Pin.OUT)
 f4.off()
-state = (0,0,0)  # RGB
-neo = neopixel.NeoPixel(Pin(28),1)
-neo[0] = state
-neo.write()
 
 # BLE Peripheral
 pico_ble = BLE_CEEO.Yell(name='Pico', verbose=True)
@@ -49,10 +43,8 @@ def on_ble_rx(data):
     elif message == "red_light" and game_active:
         print("d")
         led_2.on()
-        led_1.on()
     elif message == "green_light":
         print("e")
-        led_1.off()
         led_2.off()
 
 # Function to buzz
@@ -90,10 +82,8 @@ def buzz_start():
 def flash_red():
     for _ in range(3):
         led_2.on()
-        led_1.on()
         time.sleep(0.3)
         led_2.off()
-        led_1.off()
         time.sleep(0.3)
 
 # Function to check button press
